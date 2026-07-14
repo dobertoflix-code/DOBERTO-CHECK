@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>DOBERTO CHECK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0908;
+    --panel:#151313;
+    --panel2:#1D1918;
+    --red:#E10600;
+    --red-dim:#7A0400;
+    --red-glow:rgba(225,6,0,0.55);
+    --text:#F2EDEA;
+    --sub:#8C8380;
+    --line:#2A2422;
+    --ok:#3FBF6F;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;font-family:'Cormorant Garamond',Georgia,serif;}
+  body{
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(225,6,0,0.10), transparent 55%),
+      radial-gradient(ellipse at 50% 110%, rgba(225,6,0,0.06), transparent 60%),
+      var(--bg);
+  }
+  #app{
+    max-width:430px;
+    min-height:100vh;
+    margin:0 auto;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    box-shadow:0 0 40px rgba(0,0,0,0.7);
+    overflow:hidden;
+  }
+  /* faint film-grain vignette */
+  #app::before{
+    content:"";
+    position:absolute;inset:0;
+    pointer-events:none;
+    background:radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55) 100%);
+    z-index:1;
+  }
+
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 18px 0;
+    flex-shrink:0;
+    position:relative;z-index:2;
+  }
+  .brandmark{
+    font-family:'Cinzel Decorative',serif;
+    font-size:12px;letter-spacing:2px;color:var(--sub);
+  }
+  .menu-btn{
+    background:none;border:1px solid var(--line);color:var(--sub);
+    font-size:16px;cursor:pointer;padding:4px 10px;border-radius:6px;
+  }
+
+  .screen{
+    flex:1;display:flex;flex-direction:column;align-items:center;
+    padding:18px 30px 34px;position:relative;z-index:2;
+  }
+
+  .badge{
+    width:92px;height:92px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 35% 30%, #241010, #0d0808 70%);
+    border:1.5px solid var(--red-dim);
+    box-shadow:0 0 0 1px rgba(225,6,0,0.15), 0 0 26px var(--red-glow);
+    margin:22px 0 20px;
+    font-size:40px;
+    animation:pulseGlow 2.6s ease-in-out infinite;
+  }
+  @keyframes pulseGlow{
+    0%,100%{box-shadow:0 0 0 1px rgba(225,6,0,0.15), 0 0 18px rgba(225,6,0,0.35);}
+    50%{box-shadow:0 0 0 1px rgba(225,6,0,0.25), 0 0 34px rgba(225,6,0,0.65);}
+  }
+
+  h1.title{
+    font-family:'Cinzel Decorative',serif;
+    font-weight:700;
+    font-size:23px;
+    color:var(--text);
+    letter-spacing:1px;
+    margin:0 0 4px;
+    text-align:center;
+    position:relative;
+  }
+  .title .accent{color:var(--red);}
+
+  /* glitch layers */
+  .glitch::before,.glitch::after{
+    content:attr(data-text);
+    position:absolute;top:0;left:0;width:100%;
+    background:transparent;
+    overflow:hidden;
+  }
+  .glitch::before{
+    left:2px;
+    text-shadow:-2px 0 var(--red);
+    animation:glitchTop 4s infinite linear alternate-reverse;
+  }
+  .glitch::after{
+    left:-2px;
+    text-shadow:-2px 0 #00d4ff, 2px 2px var(--red);
+    animation:glitchBottom 3.2s infinite linear alternate-reverse;
+  }
+  @keyframes glitchTop{
+    0%{clip-path:inset(0 0 92% 0);} 5%{clip-path:inset(15% 0 60% 0);}
+    10%{clip-path:inset(80% 0 2% 0);} 15%{clip-path:inset(40% 0 43% 0);}
+    20%{clip-path:inset(0 0 92% 0);} 55%{clip-path:inset(0 0 92% 0);}
+    60%{clip-path:inset(25% 0 55% 0);} 65%{clip-path:inset(0 0 92% 0);}
+    100%{clip-path:inset(0 0 92% 0);}
+  }
+  @keyframes glitchBottom{
+    0%{clip-path:inset(88% 0 0 0);} 8%{clip-path:inset(40% 0 40% 0);}
+    12%{clip-path:inset(5% 0 78% 0);} 18%{clip-path:inset(88% 0 0 0);}
+    50%{clip-path:inset(88% 0 0 0);} 58%{clip-path:inset(60% 0 20% 0);}
+    64%{clip-path:inset(88% 0 0 0);} 100%{clip-path:inset(88% 0 0 0);}
+  }
+
+  @keyframes screenShake{
+    10%,90%{transform:translateX(-1px);}
+    20%,80%{transform:translateX(2px);}
+    30%,50%,70%{transform:translateX(-5px);}
+    40%,60%{transform:translateX(5px);}
+  }
+  .shake{animation:screenShake .4s ease;}
+
+  #flash{
+    position:fixed;inset:0;background:var(--red);
+    opacity:0;pointer-events:none;z-index:30;
+  }
+  #flash.hit{animation:flashHit .35s ease-out;}
+  @keyframes flashHit{
+    0%{opacity:0.65;} 100%{opacity:0;}
+  }
+
+  .sound-btn{
+    background:none;border:1px solid var(--line);color:var(--sub);
+    font-size:14px;cursor:pointer;padding:4px 9px;border-radius:6px;margin-right:8px;
+  }
+  .flourish{
+    font-size:11px;letter-spacing:3px;color:var(--red-dim);margin-bottom:18px;text-transform:uppercase;
+  }
+  p.desc{
+    font-size:16.5px;color:var(--sub);text-align:center;line-height:1.5;margin:0 0 30px;
+    max-width:300px;font-style:italic;
+  }
+  p.desc b{color:var(--text);font-style:normal;}
+
+  .field-group{width:100%;max-width:320px;}
+  .phone-row{
+    display:flex;align-items:flex-end;gap:12px;
+    border-bottom:2px solid var(--red);
+    padding-bottom:10px;
+    margin-bottom:8px;
+    background:rgba(255,255,255,0.02);
+    padding:10px 12px 10px;
+    border-radius:6px 6px 0 0;
+  }
+  .phone-row .code{
+    font-size:18px;color:var(--text);font-weight:600;padding-bottom:2px;font-family:'Cormorant Garamond',serif;
+  }
+  .phone-row input{
+    flex:1;border:none;outline:none;background:transparent;font-size:19px;color:var(--text);
+    padding-bottom:2px;letter-spacing:0.5px;font-family:'Cormorant Garamond',serif;
+  }
+  .phone-row input::placeholder{color:#5c5450;}
+  .hint{font-size:13px;color:var(--sub);margin:14px 0 0;text-align:center;line-height:1.5;max-width:300px;}
+
+  .cta-wrap{width:100%;max-width:320px;margin-top:28px;}
+  .cta-btn{
+    width:100%;
+    background:linear-gradient(180deg, #FF1E1A, var(--red) 55%, #9A0400);
+    color:#fff;border:none;border-radius:8px;
+    padding:15px 0;
+    font-family:'Cinzel Decorative',serif;
+    font-size:15px;letter-spacing:2px;font-weight:700;
+    cursor:pointer;
+    box-shadow:0 6px 18px rgba(225,6,0,0.35);
+    transition:transform .1s ease, filter .15s ease;
+  }
+  .cta-btn:active{transform:scale(0.97);}
+  .cta-btn:disabled{filter:grayscale(0.6) brightness(0.55);cursor:not-allowed;box-shadow:none;}
+
+  /* RESULT SCREEN */
+  #screenResult{display:none;}
+  .num-display{
+    font-size:20px;font-weight:600;color:var(--text);margin-bottom:6px;letter-spacing:0.5px;
+  }
+  .edit-link{
+    background:none;border:none;color:var(--sub);font-size:13.5px;cursor:pointer;
+    padding:4px 0 24px;font-weight:600;text-decoration:underline;text-underline-offset:3px;
+  }
+
+  .spinner{
+    width:42px;height:42px;border-radius:50%;
+    border:3px solid #3a2c2a;border-top-color:var(--red);
+    animation:spin .7s linear infinite;
+    margin:8px 0 16px;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .verifying-text{font-size:15.5px;color:var(--sub);margin-bottom:10px;font-style:italic;}
+
+  .result-card{
+    width:100%;max-width:320px;
+    border-radius:10px;
+    padding:26px 20px;
+    text-align:center;
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    margin-top:6px;
+    border:1px solid var(--line);
+  }
+  .result-card.show{display:flex;animation:reveal .3s ease-out;}
+  @keyframes reveal{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  .result-card.banned{
+    background:linear-gradient(180deg, rgba(225,6,0,0.14), rgba(225,6,0,0.03));
+    border-color:var(--red-dim);
+  }
+  .result-card.ok{
+    background:linear-gradient(180deg, rgba(63,191,111,0.10), rgba(63,191,111,0.02));
+    border-color:#1f4a30;
+  }
+  .result-icon{font-size:34px;margin-bottom:12px;}
+  .result-title{
+    font-family:'Cinzel Decorative',serif;
+    font-size:19px;font-weight:700;letter-spacing:1px;margin-bottom:8px;
+  }
+  .result-card.banned .result-title{color:var(--red);}
+  .result-card.ok .result-title{color:var(--ok);}
+  .result-sub{font-size:14.5px;color:var(--sub);line-height:1.5;font-style:italic;}
+
+  .again-btn{
+    margin-top:26px;
+    background:none;border:1.5px solid var(--red-dim);color:var(--sub);
+    font-weight:600;font-size:13.5px;letter-spacing:1px;
+    padding:11px 26px;border-radius:24px;cursor:pointer;
+  }
+  .again-btn:active{transform:scale(0.97);}
+
+  /* ADMIN MODAL */
+  #overlay{
+    position:absolute;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:flex-end;z-index:20;
+  }
+  #overlay.open{display:flex;}
+  #sheet{
+    background:var(--panel);width:100%;max-height:80%;border-radius:16px 16px 0 0;
+    display:flex;flex-direction:column;animation:slideUp .18s ease-out;
+    border-top:1px solid var(--red-dim);
+  }
+  @keyframes slideUp{from{transform:translateY(30px);opacity:0.5;}to{transform:translateY(0);opacity:1;}}
+  #sheet .shead{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
+  #sheet .shead h3{margin:0;font-size:15px;color:var(--text);font-family:'Cinzel Decorative',serif;letter-spacing:1px;}
+  #sheet .closeX{background:none;border:none;font-size:20px;cursor:pointer;color:var(--sub);}
+  #sheet .sbody{padding:14px 16px;overflow-y:auto;}
+  .addrow{display:flex;gap:8px;margin-bottom:14px;}
+  .addrow input{flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px;outline:none;background:var(--panel2);color:var(--text);}
+  .addrow button{background:var(--red);color:#fff;border:none;border-radius:8px;padding:0 16px;font-size:14px;font-weight:600;cursor:pointer;}
+  .banlist{list-style:none;margin:0;padding:0;}
+  .banlist li{display:flex;align-items:center;justify-content:space-between;padding:10px 4px;border-bottom:1px solid var(--line);font-size:14.5px;color:var(--text);}
+  .banlist li .rm{background:none;border:none;color:var(--red);font-size:13px;cursor:pointer;font-weight:600;}
+  .empty-note{color:var(--sub);font-size:13.5px;text-align:center;padding:16px 0;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="topbar">
+    <span class="brandmark">DOBERTO SYSTEM</span>
+    <div>
+      <button class="sound-btn" id="soundBtn" title="Son on/off">🔊</button>
+      <button class="menu-btn" id="adminBtn" title="Jere lis bani">⋮</button>
+    </div>
+  </div>
+
+  <div id="flash"></div>
+
+  <!-- SCREEN 1: ENTRY -->
+  <div class="screen" id="screenEntry">
+    <div class="badge">💀</div>
+    <h1 class="title glitch" data-text="DOBERTO CHECK">DOBERTO <span class="accent">CHECK</span></h1>
+    <div class="flourish">✦ Cek Ban ✦</div>
+    <p class="desc">Antre nimewo a pou konnen si li <b>BANI</b> oswa li <b>poko bani</b>.</p>
+
+    <div class="field-group">
+      <div class="phone-row">
+        <span class="code">+509</span>
+        <input id="numInput" type="tel" inputmode="tel" placeholder="Nimewo telefòn" autocomplete="off">
+      </div>
+      <p class="hint">Repons lan parèt touswit, san atann.</p>
+    </div>
+
+    <div class="cta-wrap">
+      <button class="cta-btn" id="nextBtn" disabled>CEK BAN</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: VERIFYING / RESULT -->
+  <div class="screen" id="screenResult">
+    <div class="badge" style="margin-top:26px;">💀</div>
+    <div class="num-display" id="numDisplay">+509 0000-0000</div>
+    <button class="edit-link" id="editBtn">Modifye nimewo a</button>
+
+    <div id="verifyingBlock" style="display:flex;flex-direction:column;align-items:center;">
+      <div class="spinner"></div>
+      <div class="verifying-text">N ap tcheke...</div>
+    </div>
+
+    <div class="result-card" id="resultCard">
+      <div class="result-icon" id="resultIcon"></div>
+      <div class="result-title" id="resultTitle"></div>
+      <div class="result-sub" id="resultSub"></div>
+    </div>
+
+    <button class="again-btn" id="againBtn" style="display:none;">TCHEKE YON LÒT</button>
+  </div>
+
+  <!-- ADMIN OVERLAY -->
+  <div id="overlay">
+    <div id="sheet">
+      <div class="shead">
+        <h3>JERE LIS BANI</h3>
+        <button class="closeX" id="closeAdmin">✕</button>
+      </div>
+      <div class="sbody">
+        <div class="addrow">
+          <input id="banInput" type="tel" placeholder="Nimewo pou bani...">
+          <button id="banBtn">Bani</button>
+        </div>
+        <ul class="banlist" id="banList"></ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const numInput = document.getElementById('numInput');
+const nextBtn = document.getElementById('nextBtn');
+const screenEntry = document.getElementById('screenEntry');
+const screenResult = document.getElementById('screenResult');
+const numDisplay = document.getElementById('numDisplay');
+const editBtn = document.getElementById('editBtn');
+const verifyingBlock = document.getElementById('verifyingBlock');
+const resultCard = document.getElementById('resultCard');
+const resultIcon = document.getElementById('resultIcon');
+const resultTitle = document.getElementById('resultTitle');
+const resultSub = document.getElementById('resultSub');
+const againBtn = document.getElementById('againBtn');
+
+const overlay = document.getElementById('overlay');
+const adminBtn = document.getElementById('adminBtn');
+const closeAdmin = document.getElementById('closeAdmin');
+const banInput = document.getElementById('banInput');
+const banBtn = document.getElementById('banBtn');
+const banList = document.getElementById('banList');
+const soundBtn = document.getElementById('soundBtn');
+const flashEl = document.getElementById('flash');
+const appEl = document.getElementById('app');
+
+/* ---------- AUDIO ENGINE (no external files, Web Audio API) ---------- */
+let soundOn = true;
+let actx = null;
+function getCtx(){
+  if(!actx){
+    actx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if(actx.state === 'suspended') actx.resume();
+  return actx;
+}
+soundBtn.addEventListener('click', () => {
+  soundOn = !soundOn;
+  soundBtn.textContent = soundOn ? '🔊' : '🔇';
+});
+
+function playClick(){
+  if(!soundOn) return;
+  const ctx = getCtx();
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.type = 'square';
+  o.frequency.setValueAtTime(180, ctx.currentTime);
+  o.frequency.exponentialRampToValueAtTime(90, ctx.currentTime + 0.09);
+  g.gain.setValueAtTime(0.06, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+  o.connect(g); g.connect(ctx.destination);
+  o.start(); o.stop(ctx.currentTime + 0.1);
+}
+
+function playThud(delay){
+  if(!soundOn) return;
+  const ctx = getCtx();
+  const t = ctx.currentTime + delay;
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.type = 'sine';
+  o.frequency.setValueAtTime(90, t);
+  o.frequency.exponentialRampToValueAtTime(40, t + 0.25);
+  g.gain.setValueAtTime(0.22, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+  o.connect(g); g.connect(ctx.destination);
+  o.start(t); o.stop(t + 0.3);
+}
+
+function playHeartbeat(){
+  if(!soundOn) return;
+  playThud(0);
+  playThud(0.32);
+}
+
+function noiseBurst(ctx, t, duration, gainPeak){
+  const bufferSize = Math.floor(ctx.sampleRate * duration);
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for(let i = 0; i < bufferSize; i++){ data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize); }
+  const src = ctx.createBufferSource();
+  src.buffer = buffer;
+  const filt = ctx.createBiquadFilter();
+  filt.type = 'bandpass';
+  filt.frequency.setValueAtTime(900, t);
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(gainPeak, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + duration);
+  src.connect(filt); filt.connect(g); g.connect(ctx.destination);
+  src.start(t);
+}
+
+function playBannedSting(){
+  if(!soundOn) return;
+  const ctx = getCtx();
+  const t = ctx.currentTime;
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.type = 'sawtooth';
+  o.frequency.setValueAtTime(140, t);
+  o.frequency.exponentialRampToValueAtTime(45, t + 0.6);
+  g.gain.setValueAtTime(0.16, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.65);
+  o.connect(g); g.connect(ctx.destination);
+  o.start(t); o.stop(t + 0.7);
+  noiseBurst(ctx, t, 0.35, 0.18);
+}
+
+function playOkChime(){
+  if(!soundOn) return;
+  const ctx = getCtx();
+  const notes = [523.25, 659.25, 784.0];
+  notes.forEach((freq, i) => {
+    const t = ctx.currentTime + i * 0.09;
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = 'triangle';
+    o.frequency.setValueAtTime(freq, t);
+    g.gain.setValueAtTime(0.09, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.32);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(t); o.stop(t + 0.35);
+  });
+}
+/* ---------- END AUDIO ENGINE ---------- */
+
+function normalize(n){ return n.replace(/[^\d]/g,''); }
+
+function formatDisplay(n){
+  if(n.length >= 8){
+    return '+509 ' + n.slice(0,4) + '-' + n.slice(4,8);
+  }
+  return '+509 ' + n;
+}
+
+numInput.addEventListener('input', () => {
+  nextBtn.disabled = normalize(numInput.value).length < 6;
+});
+numInput.addEventListener('keydown', e => {
+  if(e.key === 'Enter' && !nextBtn.disabled) startCheck();
+});
+nextBtn.addEventListener('click', () => { playClick(); startCheck(); });
+editBtn.addEventListener('click', backToEntry);
+againBtn.addEventListener('click', backToEntry);
+
+function backToEntry(){
+  screenResult.style.display = 'none';
+  screenEntry.style.display = 'flex';
+  numInput.focus();
+}
+
+async function isBanned(number){
+  try{
+    const res = await window.storage.get('banned:' + number, true);
+    return !!res;
+  }catch(e){ return false; }
+}
+
+async function startCheck(){
+  const normalized = normalize(numInput.value);
+  if(!normalized) return;
+
+  numDisplay.textContent = formatDisplay(normalized);
+  screenEntry.style.display = 'none';
+  screenResult.style.display = 'flex';
+  verifyingBlock.style.display = 'flex';
+  resultCard.classList.remove('show');
+  againBtn.style.display = 'none';
+
+  playHeartbeat();
+
+  const banned = await isBanned(normalized);
+
+  setTimeout(() => {
+    verifyingBlock.style.display = 'none';
+    resultCard.classList.add('show');
+    if(banned){
+      resultCard.className = 'result-card show banned';
+      resultIcon.textContent = '☠';
+      resultTitle.textContent = 'NIMEWO SA A BANI';
+      resultSub.textContent = 'Li pa gen aksè ankò, li nan lis moun ki bani.';
+      playBannedSting();
+      flashEl.classList.remove('hit'); void flashEl.offsetWidth; flashEl.classList.add('hit');
+      appEl.classList.remove('shake'); void appEl.offsetWidth; appEl.classList.add('shake');
+    } else {
+      resultCard.className = 'result-card show ok';
+      resultIcon.textContent = '✔';
+      resultTitle.textContent = 'POKO BANI';
+      resultSub.textContent = 'Nimewo sa a gen aksè nòmal, li pa nan lis bani.';
+      playOkChime();
+    }
+    againBtn.style.display = 'inline-block';
+  }, 1000);
+}
+
+/* ADMIN */
+adminBtn.addEventListener('click', () => { overlay.classList.add('open'); loadBanList(); });
+closeAdmin.addEventListener('click', () => overlay.classList.remove('open'));
+overlay.addEventListener('click', e => { if(e.target === overlay) overlay.classList.remove('open'); });
+
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+async function loadBanList(){
+  banList.innerHTML = '<div class="empty-note">Ap chaje...</div>';
+  try{
+    const res = await window.storage.list('banned:', true);
+    const keys = (res && res.keys) ? res.keys : [];
+    if(keys.length === 0){
+      banList.innerHTML = '<div class="empty-note">Poko gen nimewo bani.</div>';
+      return;
+    }
+    banList.innerHTML = '';
+    keys.forEach(k => {
+      const num = k.replace('banned:', '');
+      const li = document.createElement('li');
+      li.innerHTML = '<span>' + escapeHtml(num) + '</span>';
+      const rm = document.createElement('button');
+      rm.className = 'rm';
+      rm.textContent = 'Retire';
+      rm.addEventListener('click', async () => {
+        try{ await window.storage.delete(k, true); }catch(e){}
+        loadBanList();
+      });
+      li.appendChild(rm);
+      banList.appendChild(li);
+    });
+  }catch(e){
+    banList.innerHTML = '<div class="empty-note">Poko gen nimewo bani.</div>';
+  }
+}
+
+banBtn.addEventListener('click', async () => {
+  const normalized = normalize(banInput.value);
+  if(!normalized) return;
+  try{
+    await window.storage.set('banned:' + normalized, '1', true);
+    banInput.value = '';
+    loadBanList();
+  }catch(e){
+    alert('Erè pandan n ap sove nimewo a.');
+  }
+});
+banInput.addEventListener('keydown', e => { if(e.key === 'Enter') banBtn.click(); });
+</script>
+</body>
+</html>
