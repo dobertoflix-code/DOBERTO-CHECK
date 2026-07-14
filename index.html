@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>DOBERTO CHECK</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#0A0908;
@@ -20,7 +18,7 @@
     --ok:#3FBF6F;
   }
   *{box-sizing:border-box;}
-  html,body{height:100%;margin:0;font-family:'Cormorant Garamond',Georgia,serif;}
+  html,body{height:100%;margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
   body{
     background:
       radial-gradient(ellipse at 50% -10%, rgba(225,6,0,0.10), transparent 55%),
@@ -53,7 +51,7 @@
     position:relative;z-index:2;
   }
   .brandmark{
-    font-family:'Cinzel Decorative',serif;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
     font-size:12px;letter-spacing:2px;color:var(--sub);
   }
   .menu-btn{
@@ -73,7 +71,7 @@
     border:1.5px solid var(--red-dim);
     box-shadow:0 0 0 1px rgba(225,6,0,0.15), 0 0 26px var(--red-glow);
     margin:22px 0 20px;
-    font-size:40px;
+    color:var(--red);
     animation:pulseGlow 2.6s ease-in-out infinite;
   }
   @keyframes pulseGlow{
@@ -82,7 +80,7 @@
   }
 
   h1.title{
-    font-family:'Cinzel Decorative',serif;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
     font-weight:700;
     font-size:23px;
     color:var(--text);
@@ -143,7 +141,8 @@
 
   .sound-btn{
     background:none;border:1px solid var(--line);color:var(--sub);
-    font-size:14px;cursor:pointer;padding:4px 9px;border-radius:6px;margin-right:8px;
+    cursor:pointer;padding:6px 9px;border-radius:6px;margin-right:8px;
+    display:inline-flex;align-items:center;justify-content:center;
   }
   .flourish{
     font-size:11px;letter-spacing:3px;color:var(--red-dim);margin-bottom:18px;text-transform:uppercase;
@@ -165,11 +164,11 @@
     border-radius:6px 6px 0 0;
   }
   .phone-row .code{
-    font-size:18px;color:var(--text);font-weight:600;padding-bottom:2px;font-family:'Cormorant Garamond',serif;
+    font-size:18px;color:var(--text);font-weight:600;padding-bottom:2px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   }
   .phone-row input{
     flex:1;border:none;outline:none;background:transparent;font-size:19px;color:var(--text);
-    padding-bottom:2px;letter-spacing:0.5px;font-family:'Cormorant Garamond',serif;
+    padding-bottom:2px;letter-spacing:0.5px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   }
   .phone-row input::placeholder{color:#5c5450;}
   .hint{font-size:13px;color:var(--sub);margin:14px 0 0;text-align:center;line-height:1.5;max-width:300px;}
@@ -180,7 +179,7 @@
     background:linear-gradient(180deg, #FF1E1A, var(--red) 55%, #9A0400);
     color:#fff;border:none;border-radius:8px;
     padding:15px 0;
-    font-family:'Cinzel Decorative',serif;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
     font-size:15px;letter-spacing:2px;font-weight:700;
     cursor:pointer;
     box-shadow:0 6px 18px rgba(225,6,0,0.35);
@@ -231,7 +230,7 @@
   }
   .result-icon{font-size:34px;margin-bottom:12px;}
   .result-title{
-    font-family:'Cinzel Decorative',serif;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
     font-size:19px;font-weight:700;letter-spacing:1px;margin-bottom:8px;
   }
   .result-card.banned .result-title{color:var(--red);}
@@ -258,7 +257,7 @@
   }
   @keyframes slideUp{from{transform:translateY(30px);opacity:0.5;}to{transform:translateY(0);opacity:1;}}
   #sheet .shead{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
-  #sheet .shead h3{margin:0;font-size:15px;color:var(--text);font-family:'Cinzel Decorative',serif;letter-spacing:1px;}
+  #sheet .shead h3{margin:0;font-size:15px;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;letter-spacing:1px;}
   #sheet .closeX{background:none;border:none;font-size:20px;cursor:pointer;color:var(--sub);}
   #sheet .sbody{padding:14px 16px;overflow-y:auto;}
   .addrow{display:flex;gap:8px;margin-bottom:14px;}
@@ -276,7 +275,17 @@
   <div class="topbar">
     <span class="brandmark">DOBERTO SYSTEM</span>
     <div>
-      <button class="sound-btn" id="soundBtn" title="Son on/off">🔊</button>
+      <button class="sound-btn" id="soundBtn" title="Son on/off">
+        <svg id="soundIconOn" viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
+          <path d="M4 9v6h4l5 5V4L8 9H4z"/>
+          <path d="M16.5 8.3a5.5 5.5 0 010 7.4v-1.8a3.7 3.7 0 000-3.8V8.3z"/>
+          <path d="M18.7 6a8.5 8.5 0 010 12v-2a6.7 6.7 0 000-8V6z"/>
+        </svg>
+        <svg id="soundIconOff" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="display:none;">
+          <path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor" stroke="none"/>
+          <path d="M16.2 9l4.6 4.6M20.8 9l-4.6 4.6"/>
+        </svg>
+      </button>
       <button class="menu-btn" id="adminBtn" title="Jere lis bani">⋮</button>
     </div>
   </div>
@@ -285,9 +294,16 @@
 
   <!-- SCREEN 1: ENTRY -->
   <div class="screen" id="screenEntry">
-    <div class="badge">💀</div>
+    <div class="badge">
+      <svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2.5C7.3 2.5 4.3 5.9 4.3 10.2c0 2.7 1.2 4.4 2.5 5.6v3.1c0 .6.5 1.1 1.1 1.1h1v1.7c0 .3.2.5.5.5h1.7c.3 0 .5-.2.5-.5v-1.7h1.6v1.7c0 .3.2.5.5.5h1.7c.3 0 .5-.2.5-.5v-1.7h1c.6 0 1.1-.5 1.1-1.1v-3.1c1.3-1.2 2.5-2.9 2.5-5.6C19.7 5.9 16.7 2.5 12 2.5z"/>
+        <circle cx="9" cy="10.5" r="1.5" fill="currentColor" stroke="none"/>
+        <circle cx="15" cy="10.5" r="1.5" fill="currentColor" stroke="none"/>
+        <path d="M11 13l1 2 1-2"/>
+      </svg>
+    </div>
     <h1 class="title glitch" data-text="DOBERTO CHECK">DOBERTO <span class="accent">CHECK</span></h1>
-    <div class="flourish">✦ Cek Ban ✦</div>
+    <div class="flourish">✦ Check Ban ✦</div>
     <p class="desc">Antre nimewo a pou konnen si li <b>BANI</b> oswa li <b>poko bani</b>.</p>
 
     <div class="field-group">
@@ -299,13 +315,20 @@
     </div>
 
     <div class="cta-wrap">
-      <button class="cta-btn" id="nextBtn" disabled>CEK BAN</button>
+      <button class="cta-btn" id="nextBtn" disabled>CHECK BAN</button>
     </div>
   </div>
 
   <!-- SCREEN 2: VERIFYING / RESULT -->
   <div class="screen" id="screenResult">
-    <div class="badge" style="margin-top:26px;">💀</div>
+    <div class="badge" style="margin-top:26px;">
+      <svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2.5C7.3 2.5 4.3 5.9 4.3 10.2c0 2.7 1.2 4.4 2.5 5.6v3.1c0 .6.5 1.1 1.1 1.1h1v1.7c0 .3.2.5.5.5h1.7c.3 0 .5-.2.5-.5v-1.7h1.6v1.7c0 .3.2.5.5.5h1.7c.3 0 .5-.2.5-.5v-1.7h1c.6 0 1.1-.5 1.1-1.1v-3.1c1.3-1.2 2.5-2.9 2.5-5.6C19.7 5.9 16.7 2.5 12 2.5z"/>
+        <circle cx="9" cy="10.5" r="1.5" fill="currentColor" stroke="none"/>
+        <circle cx="15" cy="10.5" r="1.5" fill="currentColor" stroke="none"/>
+        <path d="M11 13l1 2 1-2"/>
+      </svg>
+    </div>
     <div class="num-display" id="numDisplay">+509 0000-0000</div>
     <button class="edit-link" id="editBtn">Modifye nimewo a</button>
 
@@ -378,7 +401,8 @@ function getCtx(){
 }
 soundBtn.addEventListener('click', () => {
   soundOn = !soundOn;
-  soundBtn.textContent = soundOn ? '🔊' : '🔇';
+  document.getElementById('soundIconOn').style.display = soundOn ? 'block' : 'none';
+  document.getElementById('soundIconOff').style.display = soundOn ? 'none' : 'block';
 });
 
 function playClick(){
@@ -519,7 +543,7 @@ async function startCheck(){
     resultCard.classList.add('show');
     if(banned){
       resultCard.className = 'result-card show banned';
-      resultIcon.textContent = '☠';
+      resultIcon.innerHTML = '<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5C7.3 2.5 4.3 5.9 4.3 10.2c0 2.7 1.2 4.4 2.5 5.6v3.1c0 .6.5 1.1 1.1 1.1h1v1.7c0 .3.2.5.5.5h1.7c.3 0 .5-.2.5-.5v-1.7h1.6v1.7c0 .3.2.5.5.5h1.7c.3 0 .5-.2.5-.5v-1.7h1c.6 0 1.1-.5 1.1-1.1v-3.1c1.3-1.2 2.5-2.9 2.5-5.6C19.7 5.9 16.7 2.5 12 2.5z"/><circle cx="9" cy="10.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="15" cy="10.5" r="1.5" fill="currentColor" stroke="none"/><path d="M11 13l1 2 1-2"/></svg>';
       resultTitle.textContent = 'NIMEWO SA A BANI';
       resultSub.textContent = 'Li pa gen aksè ankò, li nan lis moun ki bani.';
       playBannedSting();
@@ -527,7 +551,7 @@ async function startCheck(){
       appEl.classList.remove('shake'); void appEl.offsetWidth; appEl.classList.add('shake');
     } else {
       resultCard.className = 'result-card show ok';
-      resultIcon.textContent = '✔';
+      resultIcon.innerHTML = '<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6"/></svg>';
       resultTitle.textContent = 'POKO BANI';
       resultSub.textContent = 'Nimewo sa a gen aksè nòmal, li pa nan lis bani.';
       playOkChime();
