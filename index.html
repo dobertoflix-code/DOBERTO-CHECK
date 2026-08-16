@@ -281,28 +281,6 @@
   }
   .again-btn:active{transform:scale(0.97);}
 
-  /* ADMIN MODAL */
-  #overlay{
-    position:absolute;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:flex-end;z-index:20;
-  }
-  #overlay.open{display:flex;}
-  #sheet{
-    background:var(--panel);width:100%;max-height:80%;border-radius:16px 16px 0 0;
-    display:flex;flex-direction:column;animation:slideUp .18s ease-out;
-    border-top:1px solid var(--red-dim);
-  }
-  @keyframes slideUp{from{transform:translateY(30px);opacity:0.5;}to{transform:translateY(0);opacity:1;}}
-  #sheet .shead{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;}
-  #sheet .shead h3{margin:0;font-size:15px;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;letter-spacing:1px;}
-  #sheet .closeX{background:none;border:none;font-size:20px;cursor:pointer;color:var(--sub);}
-  #sheet .sbody{padding:14px 16px;overflow-y:auto;}
-  .addrow{display:flex;gap:8px;margin-bottom:14px;}
-  .addrow input{flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px;outline:none;background:var(--panel2);color:var(--text);}
-  .addrow button{background:var(--red);color:#fff;border:none;border-radius:8px;padding:0 16px;font-size:14px;font-weight:600;cursor:pointer;}
-  .banlist{list-style:none;margin:0;padding:0;}
-  .banlist li{display:flex;align-items:center;justify-content:space-between;padding:10px 4px;border-bottom:1px solid var(--line);font-size:14.5px;color:var(--text);}
-  .banlist li .rm{background:none;border:none;color:var(--red);font-size:13px;cursor:pointer;font-weight:600;}
-  .empty-note{color:var(--sub);font-size:13.5px;text-align:center;padding:16px 0;}
 </style>
 </head>
 <body>
@@ -329,7 +307,6 @@
         <svg id="iconMoon" viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M20.7 14.9a8.5 8.5 0 01-11-11.6A9 9 0 1021 15.9a8.6 8.6 0 01-.3-1z"/></svg>
         <svg id="iconSun" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/></svg>
       </button>
-      <button class="menu-btn" id="adminBtn" title="Jere lis bani" data-i18n-title="adminTitle">⋮</button>
     </div>
   </div>
 
@@ -389,22 +366,6 @@
     <button class="again-btn" id="againBtn" style="display:none;">CHECK ANOTHER</button>
   </div>
 
-  <!-- ADMIN OVERLAY -->
-  <div id="overlay">
-    <div id="sheet">
-      <div class="shead">
-        <h3 id="adminTitleText">MANAGE BAN LIST</h3>
-        <button class="closeX" id="closeAdmin">✕</button>
-      </div>
-      <div class="sbody">
-        <div class="addrow">
-          <input id="banInput" type="tel" placeholder="Number to ban...">
-          <button id="banBtn">Ban</button>
-        </div>
-        <ul class="banlist" id="banList"></ul>
-      </div>
-    </div>
-  </div>
 
 </div>
 
@@ -422,12 +383,6 @@ const resultTitle = document.getElementById('resultTitle');
 const resultSub = document.getElementById('resultSub');
 const againBtn = document.getElementById('againBtn');
 
-const overlay = document.getElementById('overlay');
-const adminBtn = document.getElementById('adminBtn');
-const closeAdmin = document.getElementById('closeAdmin');
-const banInput = document.getElementById('banInput');
-const banBtn = document.getElementById('banBtn');
-const banList = document.getElementById('banList');
 const soundBtn = document.getElementById('soundBtn');
 const flashEl = document.getElementById('flash');
 const appEl = document.getElementById('app');
@@ -448,19 +403,11 @@ const I18N = {
     editLink: 'Edit number',
     verifying: 'Checking...',
     againBtn: 'CHECK ANOTHER',
-    adminTitle: 'MANAGE BAN LIST',
-    banInputPlaceholder: 'Number to ban...',
-    banBtn: 'Ban',
-    removeBtn: 'Remove',
-    loading: 'Loading...',
-    emptyList: 'No banned numbers yet.',
-    saveError: 'Error while saving the number.',
     bannedTitle: 'THIS NUMBER IS BANNED',
     bannedSub: 'It no longer has access, it is on the banned list.',
     okTitle: 'NOT BANNED YET',
     okSub: 'This number has normal access, it is not on the banned list.',
     soundTitle: 'Sound on/off',
-    adminBtnTitle: 'Manage ban list',
     themeTitle: 'Theme',
     langBtnLabel: 'FR'
   },
@@ -473,19 +420,11 @@ const I18N = {
     editLink: 'Modifier le numéro',
     verifying: 'Vérification...',
     againBtn: 'VÉRIFIER UN AUTRE',
-    adminTitle: 'GÉRER LA LISTE DES BANNIS',
-    banInputPlaceholder: 'Numéro à bannir...',
-    banBtn: 'Bannir',
-    removeBtn: 'Retirer',
-    loading: 'Chargement...',
-    emptyList: "Aucun numéro banni pour l'instant.",
-    saveError: "Erreur lors de l'enregistrement du numéro.",
     bannedTitle: 'CE NUMÉRO EST BANNI',
     bannedSub: "Il n'a plus accès, il est sur la liste des bannis.",
     okTitle: 'PAS ENCORE BANNI',
     okSub: "Ce numéro a un accès normal, il n'est pas sur la liste des bannis.",
     soundTitle: 'Son activé/désactivé',
-    adminBtnTitle: 'Gérer la liste des bannis',
     themeTitle: 'Thème',
     langBtnLabel: 'EN'
   }
@@ -505,11 +444,7 @@ function applyLang(lang){
   editBtn.textContent = t.editLink;
   document.getElementById('verifyingText').textContent = t.verifying;
   againBtn.textContent = t.againBtn;
-  document.getElementById('adminTitleText').textContent = t.adminTitle;
-  banInput.placeholder = t.banInputPlaceholder;
-  banBtn.textContent = t.banBtn;
   soundBtn.title = t.soundTitle;
-  adminBtn.title = t.adminBtnTitle;
   themeBtn.title = t.themeTitle;
   langBtn.textContent = t.langBtnLabel;
   langBtn.title = (currentLang === 'fr') ? 'Switch to English' : 'Passer en français';
@@ -521,8 +456,6 @@ function applyLang(lang){
     resultTitle.textContent = t.okTitle;
     resultSub.textContent = t.okSub;
   }
-  // re-render admin list labels if open
-  if(overlay.classList.contains('open')) loadBanList();
 }
 
 async function savePrefs(){
@@ -765,57 +698,6 @@ async function startCheck(){
   }, 1000);
 }
 
-/* ADMIN */
-adminBtn.addEventListener('click', () => { overlay.classList.add('open'); loadBanList(); });
-closeAdmin.addEventListener('click', () => overlay.classList.remove('open'));
-overlay.addEventListener('click', e => { if(e.target === overlay) overlay.classList.remove('open'); });
-
-function escapeHtml(s){
-  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-
-async function loadBanList(){
-  const t = I18N[currentLang];
-  banList.innerHTML = '<div class="empty-note">' + t.loading + '</div>';
-  try{
-    const res = await window.storage.list('banned:', true);
-    const keys = (res && res.keys) ? res.keys : [];
-    if(keys.length === 0){
-      banList.innerHTML = '<div class="empty-note">' + t.emptyList + '</div>';
-      return;
-    }
-    banList.innerHTML = '';
-    keys.forEach(k => {
-      const num = k.replace('banned:', '');
-      const li = document.createElement('li');
-      li.innerHTML = '<span>' + escapeHtml(num) + '</span>';
-      const rm = document.createElement('button');
-      rm.className = 'rm';
-      rm.textContent = t.removeBtn;
-      rm.addEventListener('click', async () => {
-        try{ await window.storage.delete(k, true); }catch(e){}
-        loadBanList();
-      });
-      li.appendChild(rm);
-      banList.appendChild(li);
-    });
-  }catch(e){
-    banList.innerHTML = '<div class="empty-note">' + t.emptyList + '</div>';
-  }
-}
-
-banBtn.addEventListener('click', async () => {
-  const normalized = normalize(banInput.value);
-  if(!normalized) return;
-  try{
-    await window.storage.set('banned:' + normalized, '1', true);
-    banInput.value = '';
-    loadBanList();
-  }catch(e){
-    alert(I18N[currentLang].saveError);
-  }
-});
-banInput.addEventListener('keydown', e => { if(e.key === 'Enter') banBtn.click(); });
 </script>
 </body>
 </html>
