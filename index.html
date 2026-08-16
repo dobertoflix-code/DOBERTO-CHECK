@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ht">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -16,6 +16,28 @@
     --sub:#8C8380;
     --line:#2A2422;
     --ok:#3FBF6F;
+    --vignette:rgba(0,0,0,0.55);
+    --shadow-app:rgba(0,0,0,0.7);
+    --spinner-track:#3a2c2a;
+    --badge-grad-a:#241010;
+    --badge-grad-b:#0d0808;
+  }
+  html[data-theme="light"]{
+    --bg:#F4F1EE;
+    --panel:#FFFFFF;
+    --panel2:#F0ECE9;
+    --red:#D40600;
+    --red-dim:#F1B8B5;
+    --red-glow:rgba(212,6,0,0.28);
+    --text:#221E1C;
+    --sub:#6E655F;
+    --line:#E2DCD7;
+    --ok:#1E8F4E;
+    --vignette:rgba(0,0,0,0.06);
+    --shadow-app:rgba(0,0,0,0.15);
+    --spinner-track:#E6DFDA;
+    --badge-grad-a:#FBEAEA;
+    --badge-grad-b:#F4D9D8;
   }
   *{box-sizing:border-box;}
   html,body{height:100%;margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
@@ -24,6 +46,7 @@
       radial-gradient(ellipse at 50% -10%, rgba(225,6,0,0.10), transparent 55%),
       radial-gradient(ellipse at 50% 110%, rgba(225,6,0,0.06), transparent 60%),
       var(--bg);
+    transition:background-color .25s ease;
   }
   #app{
     max-width:430px;
@@ -32,16 +55,18 @@
     position:relative;
     display:flex;
     flex-direction:column;
-    box-shadow:0 0 40px rgba(0,0,0,0.7);
+    box-shadow:0 0 40px var(--shadow-app);
     overflow:hidden;
+    transition:box-shadow .25s ease;
   }
   /* faint film-grain vignette */
   #app::before{
     content:"";
     position:absolute;inset:0;
     pointer-events:none;
-    background:radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55) 100%);
+    background:radial-gradient(ellipse at center, transparent 40%, var(--vignette) 100%);
     z-index:1;
+    transition:background .25s ease;
   }
 
   .topbar{
@@ -67,7 +92,7 @@
   .badge{
     width:92px;height:92px;border-radius:50%;
     display:flex;align-items:center;justify-content:center;
-    background:radial-gradient(circle at 35% 30%, #241010, #0d0808 70%);
+    background:radial-gradient(circle at 35% 30%, var(--badge-grad-a), var(--badge-grad-b) 70%);
     border:1.5px solid var(--red-dim);
     box-shadow:0 0 0 1px rgba(225,6,0,0.15), 0 0 26px var(--red-glow);
     margin:22px 0 20px;
@@ -144,6 +169,17 @@
     cursor:pointer;padding:6px 9px;border-radius:6px;margin-right:8px;
     display:inline-flex;align-items:center;justify-content:center;
   }
+  .lang-btn,.theme-btn{
+    background:none;border:1px solid var(--line);color:var(--sub);
+    cursor:pointer;padding:6px 9px;border-radius:6px;margin-right:8px;
+    display:inline-flex;align-items:center;justify-content:center;
+    font-size:11.5px;font-weight:700;letter-spacing:0.5px;
+    min-width:30px;
+  }
+  .theme-btn svg{display:block;}
+  .theme-btn #iconSun{display:none;}
+  html[data-theme="light"] .theme-btn #iconMoon{display:none;}
+  html[data-theme="light"] .theme-btn #iconSun{display:block;}
   .flourish{
     font-size:11px;letter-spacing:3px;color:var(--red-dim);margin-bottom:18px;text-transform:uppercase;
   }
@@ -200,7 +236,7 @@
 
   .spinner{
     width:42px;height:42px;border-radius:50%;
-    border:3px solid #3a2c2a;border-top-color:var(--red);
+    border:3px solid var(--spinner-track);border-top-color:var(--red);
     animation:spin .7s linear infinite;
     margin:8px 0 16px;
   }
@@ -277,7 +313,7 @@
   <div class="topbar">
     <span class="brandmark">DOBERTO SYSTEM</span>
     <div>
-      <button class="sound-btn" id="soundBtn" title="Son on/off">
+      <button class="sound-btn" id="soundBtn" title="Son on/off" data-i18n-title="soundTitle">
         <svg id="soundIconOn" viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
           <path d="M4 9v6h4l5 5V4L8 9H4z"/>
           <path d="M16.5 8.3a5.5 5.5 0 010 7.4v-1.8a3.7 3.7 0 000-3.8V8.3z"/>
@@ -288,7 +324,12 @@
           <path d="M16.2 9l4.6 4.6M20.8 9l-4.6 4.6"/>
         </svg>
       </button>
-      <button class="menu-btn" id="adminBtn" title="Jere lis bani">⋮</button>
+      <button class="lang-btn" id="langBtn" title="Language / Langue">FR</button>
+      <button class="theme-btn" id="themeBtn" title="Theme / Thème">
+        <svg id="iconMoon" viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M20.7 14.9a8.5 8.5 0 01-11-11.6A9 9 0 1021 15.9a8.6 8.6 0 01-.3-1z"/></svg>
+        <svg id="iconSun" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.4 4.4l1.7 1.7M17.9 17.9l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.4 19.6l1.7-1.7M17.9 6.1l1.7-1.7"/></svg>
+      </button>
+      <button class="menu-btn" id="adminBtn" title="Jere lis bani" data-i18n-title="adminTitle">⋮</button>
     </div>
   </div>
 
@@ -305,15 +346,15 @@
       </svg>
     </div>
     <h1 class="title glitch" data-text="DOBERTO CHECK">DOBERTO <span class="accent">CHECK</span></h1>
-    <div class="flourish">✦ Check Ban ✦</div>
-    <p class="desc">Antre nimewo a pou konnen si li <b>BANI</b> oswa li <b>poko bani</b>.</p>
+    <div class="flourish" id="flourishText">✦ Check Ban ✦</div>
+    <p class="desc" id="descText">Enter the number to find out if it is <b>BANNED</b> or <b>not banned yet</b>.</p>
 
     <div class="field-group">
       <div class="phone-row">
         <span class="code">+509</span>
-        <input id="numInput" type="tel" inputmode="tel" placeholder="Nimewo telefòn" autocomplete="off">
+        <input id="numInput" type="tel" inputmode="tel" placeholder="Phone number" autocomplete="off">
       </div>
-      <p class="hint">Repons lan parèt touswit, san atann.</p>
+      <p class="hint" id="hintText">The answer appears instantly, no waiting.</p>
     </div>
 
     <div class="cta-wrap">
@@ -332,11 +373,11 @@
       </svg>
     </div>
     <div class="num-display" id="numDisplay">+509 0000-0000</div>
-    <button class="edit-link" id="editBtn">Modifye nimewo a</button>
+    <button class="edit-link" id="editBtn">Edit number</button>
 
     <div id="verifyingBlock" style="display:flex;flex-direction:column;align-items:center;">
       <div class="spinner"></div>
-      <div class="verifying-text">N ap tcheke...</div>
+      <div class="verifying-text" id="verifyingText">Checking...</div>
     </div>
 
     <div class="result-card" id="resultCard">
@@ -345,20 +386,20 @@
       <div class="result-sub" id="resultSub"></div>
     </div>
 
-    <button class="again-btn" id="againBtn" style="display:none;">TCHEKE YON LÒT</button>
+    <button class="again-btn" id="againBtn" style="display:none;">CHECK ANOTHER</button>
   </div>
 
   <!-- ADMIN OVERLAY -->
   <div id="overlay">
     <div id="sheet">
       <div class="shead">
-        <h3>JERE LIS BANI</h3>
+        <h3 id="adminTitleText">MANAGE BAN LIST</h3>
         <button class="closeX" id="closeAdmin">✕</button>
       </div>
       <div class="sbody">
         <div class="addrow">
-          <input id="banInput" type="tel" placeholder="Nimewo pou bani...">
-          <button id="banBtn">Bani</button>
+          <input id="banInput" type="tel" placeholder="Number to ban...">
+          <button id="banBtn">Ban</button>
         </div>
         <ul class="banlist" id="banList"></ul>
       </div>
@@ -392,6 +433,142 @@ const flashEl = document.getElementById('flash');
 const appEl = document.getElementById('app');
 const bgMusic = document.getElementById('bgMusic');
 bgMusic.volume = 0.35;
+
+const langBtn = document.getElementById('langBtn');
+const themeBtn = document.getElementById('themeBtn');
+
+/* ---------- I18N (EN / FR) ---------- */
+const I18N = {
+  en: {
+    flourish: '✦ Check Ban ✦',
+    desc: 'Enter the number to find out if it is <b>BANNED</b> or <b>not banned yet</b>.',
+    phonePlaceholder: 'Phone number',
+    hint: 'The answer appears instantly, no waiting.',
+    ctaBtn: 'CHECK BAN',
+    editLink: 'Edit number',
+    verifying: 'Checking...',
+    againBtn: 'CHECK ANOTHER',
+    adminTitle: 'MANAGE BAN LIST',
+    banInputPlaceholder: 'Number to ban...',
+    banBtn: 'Ban',
+    removeBtn: 'Remove',
+    loading: 'Loading...',
+    emptyList: 'No banned numbers yet.',
+    saveError: 'Error while saving the number.',
+    bannedTitle: 'THIS NUMBER IS BANNED',
+    bannedSub: 'It no longer has access, it is on the banned list.',
+    okTitle: 'NOT BANNED YET',
+    okSub: 'This number has normal access, it is not on the banned list.',
+    soundTitle: 'Sound on/off',
+    adminBtnTitle: 'Manage ban list',
+    themeTitle: 'Theme',
+    langBtnLabel: 'FR'
+  },
+  fr: {
+    flourish: '✦ Vérifier Ban ✦',
+    desc: "Entrez le numéro pour savoir s'il est <b>BANNI</b> ou <b>pas encore banni</b>.",
+    phonePlaceholder: 'Numéro de téléphone',
+    hint: 'La réponse apparaît instantanément, sans attente.',
+    ctaBtn: 'VÉRIFIER LE BAN',
+    editLink: 'Modifier le numéro',
+    verifying: 'Vérification...',
+    againBtn: 'VÉRIFIER UN AUTRE',
+    adminTitle: 'GÉRER LA LISTE DES BANNIS',
+    banInputPlaceholder: 'Numéro à bannir...',
+    banBtn: 'Bannir',
+    removeBtn: 'Retirer',
+    loading: 'Chargement...',
+    emptyList: "Aucun numéro banni pour l'instant.",
+    saveError: "Erreur lors de l'enregistrement du numéro.",
+    bannedTitle: 'CE NUMÉRO EST BANNI',
+    bannedSub: "Il n'a plus accès, il est sur la liste des bannis.",
+    okTitle: 'PAS ENCORE BANNI',
+    okSub: "Ce numéro a un accès normal, il n'est pas sur la liste des bannis.",
+    soundTitle: 'Son activé/désactivé',
+    adminBtnTitle: 'Gérer la liste des bannis',
+    themeTitle: 'Thème',
+    langBtnLabel: 'EN'
+  }
+};
+
+let currentLang = 'fr';
+
+function applyLang(lang){
+  currentLang = (lang === 'en') ? 'en' : 'fr';
+  const t = I18N[currentLang];
+  document.documentElement.lang = currentLang;
+  document.getElementById('flourishText').textContent = t.flourish;
+  document.getElementById('descText').innerHTML = t.desc;
+  numInput.placeholder = t.phonePlaceholder;
+  document.getElementById('hintText').textContent = t.hint;
+  nextBtn.textContent = t.ctaBtn;
+  editBtn.textContent = t.editLink;
+  document.getElementById('verifyingText').textContent = t.verifying;
+  againBtn.textContent = t.againBtn;
+  document.getElementById('adminTitleText').textContent = t.adminTitle;
+  banInput.placeholder = t.banInputPlaceholder;
+  banBtn.textContent = t.banBtn;
+  soundBtn.title = t.soundTitle;
+  adminBtn.title = t.adminBtnTitle;
+  themeBtn.title = t.themeTitle;
+  langBtn.textContent = t.langBtnLabel;
+  langBtn.title = (currentLang === 'fr') ? 'Switch to English' : 'Passer en français';
+  // re-render dynamic result texts if a result is already showing
+  if(resultCard.classList.contains('banned')){
+    resultTitle.textContent = t.bannedTitle;
+    resultSub.textContent = t.bannedSub;
+  } else if(resultCard.classList.contains('ok')){
+    resultTitle.textContent = t.okTitle;
+    resultSub.textContent = t.okSub;
+  }
+  // re-render admin list labels if open
+  if(overlay.classList.contains('open')) loadBanList();
+}
+
+async function savePrefs(){
+  try{
+    await window.storage.set('prefs', JSON.stringify({ lang: currentLang, theme: currentTheme }), false);
+  }catch(e){}
+}
+
+langBtn.addEventListener('click', () => {
+  playClick();
+  applyLang(currentLang === 'fr' ? 'en' : 'fr');
+  savePrefs();
+});
+
+/* ---------- THEME (dark / light) ---------- */
+let currentTheme = 'dark';
+function applyTheme(theme){
+  currentTheme = (theme === 'light') ? 'light' : 'dark';
+  if(currentTheme === 'light'){
+    document.documentElement.setAttribute('data-theme', 'light');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+}
+themeBtn.addEventListener('click', () => {
+  playClick();
+  applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+  savePrefs();
+});
+
+async function loadPrefs(){
+  let lang = (navigator.language || 'fr').toLowerCase().startsWith('en') ? 'en' : 'fr';
+  let theme = 'dark';
+  try{
+    const res = await window.storage.get('prefs', false);
+    if(res && res.value){
+      const p = JSON.parse(res.value);
+      if(p.lang) lang = p.lang;
+      if(p.theme) theme = p.theme;
+    }
+  }catch(e){}
+  applyLang(lang);
+  applyTheme(theme);
+}
+loadPrefs();
+/* ---------- END I18N / THEME ---------- */
 
 let musicStarted = false;
 function startMusicIfNeeded(){
@@ -559,19 +736,20 @@ async function startCheck(){
   setTimeout(() => {
     verifyingBlock.style.display = 'none';
     resultCard.classList.add('show');
+    const t = I18N[currentLang];
     if(banned){
       resultCard.className = 'result-card show banned';
       resultIcon.innerHTML = '<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5C7.3 2.5 4.3 5.9 4.3 10.2c0 2.7 1.2 4.4 2.5 5.6v3.1c0 .6.5 1.1 1.1 1.1h1v1.7c0 .3.2.5.5.5h1.7c.3 0 .5-.2.5-.5v-1.7h1.6v1.7c0 .3.2.5.5.5h1.7c.3 0 .5-.2.5-.5v-1.7h1c.6 0 1.1-.5 1.1-1.1v-3.1c1.3-1.2 2.5-2.9 2.5-5.6C19.7 5.9 16.7 2.5 12 2.5z"/><circle cx="9" cy="10.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="15" cy="10.5" r="1.5" fill="currentColor" stroke="none"/><path d="M11 13l1 2 1-2"/></svg>';
-      resultTitle.textContent = 'NIMEWO SA A BANI';
-      resultSub.textContent = 'Li pa gen aksè ankò, li nan lis moun ki bani.';
+      resultTitle.textContent = t.bannedTitle;
+      resultSub.textContent = t.bannedSub;
       playBannedSting();
       flashEl.classList.remove('hit'); void flashEl.offsetWidth; flashEl.classList.add('hit');
       appEl.classList.remove('shake'); void appEl.offsetWidth; appEl.classList.add('shake');
     } else {
       resultCard.className = 'result-card show ok';
       resultIcon.innerHTML = '<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6"/></svg>';
-      resultTitle.textContent = 'POKO BANI';
-      resultSub.textContent = 'Nimewo sa a gen aksè nòmal, li pa nan lis bani.';
+      resultTitle.textContent = t.okTitle;
+      resultSub.textContent = t.okSub;
       playOkChime();
     }
     againBtn.style.display = 'inline-block';
@@ -588,12 +766,13 @@ function escapeHtml(s){
 }
 
 async function loadBanList(){
-  banList.innerHTML = '<div class="empty-note">Ap chaje...</div>';
+  const t = I18N[currentLang];
+  banList.innerHTML = '<div class="empty-note">' + t.loading + '</div>';
   try{
     const res = await window.storage.list('banned:', true);
     const keys = (res && res.keys) ? res.keys : [];
     if(keys.length === 0){
-      banList.innerHTML = '<div class="empty-note">Poko gen nimewo bani.</div>';
+      banList.innerHTML = '<div class="empty-note">' + t.emptyList + '</div>';
       return;
     }
     banList.innerHTML = '';
@@ -603,7 +782,7 @@ async function loadBanList(){
       li.innerHTML = '<span>' + escapeHtml(num) + '</span>';
       const rm = document.createElement('button');
       rm.className = 'rm';
-      rm.textContent = 'Retire';
+      rm.textContent = t.removeBtn;
       rm.addEventListener('click', async () => {
         try{ await window.storage.delete(k, true); }catch(e){}
         loadBanList();
@@ -612,7 +791,7 @@ async function loadBanList(){
       banList.appendChild(li);
     });
   }catch(e){
-    banList.innerHTML = '<div class="empty-note">Poko gen nimewo bani.</div>';
+    banList.innerHTML = '<div class="empty-note">' + t.emptyList + '</div>';
   }
 }
 
@@ -624,7 +803,7 @@ banBtn.addEventListener('click', async () => {
     banInput.value = '';
     loadBanList();
   }catch(e){
-    alert('Erè pandan n ap sove nimewo a.');
+    alert(I18N[currentLang].saveError);
   }
 });
 banInput.addEventListener('keydown', e => { if(e.key === 'Enter') banBtn.click(); });
