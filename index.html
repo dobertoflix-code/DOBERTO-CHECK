@@ -713,9 +713,18 @@ function backToEntry(){
 
 async function isBanned(number){
   try{
-    const res = await window.storage.get('banned:' + number, true);
-    return !!res;
-  }catch(e){ return false; }
+    const res = await fetch('/api/check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ number: '+509' + number }),
+    });
+    if(!res.ok) throw new Error('check failed');
+    const data = await res.json();
+    return !!data.banned;
+  }catch(e){
+    console.error('BanCheck error:', e);
+    return false;
+  }
 }
 
 async function startCheck(){
